@@ -7,14 +7,9 @@ from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import Flatten, Dense, Lambda, Dropout, ELU
 from keras.layers.convolutional import Convolution2D, Cropping2D
-from keras.layers.advanced_activations import PReLU
-from keras.layers.pooling import MaxPooling2D, AveragePooling2D
-from keras.callbacks import ModelCheckpoint
 from keras import backend as K
 
-DATA_PATH = './data/'
-
-
+# Use generator to avoid low memory
 def generator(samples, batch_size=32):
     num_samples = len(samples)
     while 1:
@@ -27,15 +22,15 @@ def generator(samples, batch_size=32):
             for batch_sample in batch_samples:
                 for i in range(3):
                     name = './data/IMG/' + batch_sample[i].split('\\')[-1]
-                    #image = cv2.resize(cv2.imread(name), (200, 100), interpolation=cv2.INTER_AREA)
                     image = cv2.cvtColor(cv2.imread(name), cv2.COLOR_BGR2YUV)
                     images.append(image)
-                    #images.append(cv2.flip(image, 1))
-                    #angles.append(angle * -1.0)
                 correction = 0.2
                 angle = float(batch_sample[3])
+                # angle center image
                 angles.append(angle)
+                # angle left image
                 angles.append(angle + correction)
+                # angle right image
                 angles.append(angle - correction)
 
             yield shuffle(np.array(images), np.array(angles))
@@ -87,9 +82,6 @@ model.add(ELU())
 model.add(Dense(1, trainable=False))
 
 model.summary()
-#checkpoint = ModelCheckpoint("model-{epoch:02d}.h5", monitor='loss', verbose=1, save_best_only=False, mode='max')
-#callbacks_list = [checkpoint]
-
 
 model.compile(optimizer='adam', loss='mse')
 model.fit_generator(train_generator, samples_per_epoch=len(train_samples)*3, validation_data=validation_generator, nb_val_samples=len(validation_samples)*3, nb_epoch=3)
