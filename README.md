@@ -27,7 +27,7 @@ python drive.py model.h5
 
 Software dependencies: [CarND-Term1-Starter-Kit](https://github.com/udacity/CarND-Term1-Starter-Kit)
 
-### Training Strategy
+### Collecting training data
 
 ![driving log](./images/driving_log.png "driving log")
 
@@ -35,8 +35,13 @@ Software dependencies: [CarND-Term1-Starter-Kit](https://github.com/udacity/CarN
 
 ### Model Architecture
 
+My model is a multilayer convolutional neuronal network, inspired by NVIDA's [End to End Learning for Self-Driving Cars](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf) paper. Most parts of the network are the same. I made only a few changes.
+
+First difference is the input layer. I use a 160x320x3 image, that is cropped 70 pixels from the top and 25 pixels from the bottom. These parts of the image are the sky and the car, which are not importent for navigating on track. The importent part is in the middle of the picture. As you see I still use YUV color converting for input images.
+
 ![color converting and cropping](./images/color_convert_crop.png "color converting and cropping")
 
+These are the final layers of my model:
 
 | Layer         		|     Description	        					| Input |Output| 
 |:---------------------:|:---------------------------------------------:| :----:|:-----:|
@@ -54,9 +59,22 @@ Software dependencies: [CarND-Term1-Starter-Kit](https://github.com/udacity/CarN
 | Fully connected		| Connect all neurons from layer above, ELU activation  |50|10|
 | Fully connected		| Output = steering wheel angle 						|10|**1**|
 
-### Video - Autonomous driving with 30 mph
+The data is normalized with the Keras lambda layer. 
 
-[![Autonomous driving with 30 mph](http://img.youtube.com/vi/JexvhXDvB90/maxresdefault.jpg)](http://www.youtube.com/watch?v=JexvhXDvB90 "Autonomous driving with 30 mph")
+I tried different avtivation functions, ELU works best for me. 
+
+To prevent overfitting I added Dropout layer after the 5 convolutional layers. Dropout rate is 20 %.
+
+### Training
+
+Epochs = 3
+
+The model used an adam optimizer, so the learning rate was not tuned manually
+
+
+### Video - Autonomous driving
+
+[![Autonomous driving](http://img.youtube.com/vi/J6EGMKN2kL0/maxresdefault.jpg)](http://www.youtube.com/watch?v=J6EGMKN2kL0 "Autonomous driving")
 
 ### Recources
 * Self-Driving-Car Simulator: [Linux](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip), [macOS](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4594_mac-sim.app/mac-sim.app.zip), [Windows](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4419_windows-sim/windows-sim.zip), [Source](https://github.com/udacity/self-driving-car-sim)
