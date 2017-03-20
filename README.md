@@ -84,7 +84,7 @@ To prevent overfitting I added Dropout layer after the 5 convolutional layers. D
 
 ### Training
 
-I split the dataset in 80% training data and 20% validation data. I trained for 3 epochs and used an adam optimizer, so the learning rate was not tuned manually. I used a correction factor for the steering wheel angles of the right and the left images while training.
+I split the dataset in 80% training data and 20% validation data. I trained for 3 epochs and used an adam optimizer, so the learning rate was not tuned manually. I used a correction offset for the steering wheel angles of the right and the left images while training.
 
 Finally the vehicle is able to drive autonomously around the first track without leaving the road. See the result:
 
