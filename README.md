@@ -15,7 +15,7 @@ This is my solution of Project 3 of Udacity's Self Driving Car Nanodegree.
 |[model.py](./model.py)|containing the script to create and train the model|
 |[drive.py](./drive.py)|for driving the car in autonomous mode|
 |[model.h5](./model.h5)|containing a trained convolution neural network|
-|[video.mp4](./video.mp4)|video recording in autonomous mode
+|[video.mp4](./video.mp4)|video recording in autonomous mode - center camera|
 
 ### Autonomous mode
 
@@ -29,13 +29,26 @@ Software dependencies: [CarND-Term1-Starter-Kit](https://github.com/udacity/CarN
 
 ### Collecting training data
 
+Collecting data with the self-driving car simulator is easy. You just run the simulator in "training mode", press the record button and drive the car with your keyboard or controller around the track.
+
+What you get are two things. A driving-log csv file, it looks like this:
+
 ![driving log](./images/driving_log.png "driving log")
 
+**NOTE** If you collect training data on windows the driving-log csv file contains absolute paths, on linux or mac it uses relative paths. Also pay attention on the different file separators. The table above is already cleaned and shows only the filenames.
+
+The second thing you get is a directory with lots of images.
 ![training data images](./images/training_data.png "training data images")
+
+These images and the steering wheel angle value from the driving-log are used to train the model.
+
+### How to drive
+
+
 
 ### Model Architecture
 
-My model is a multilayer convolutional neuronal network, inspired by NVIDA's [End to End Learning for Self-Driving Cars](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf) paper. Most parts of the network are the same. I made only a few changes.
+My model is a multilayer convolutional neuronal network, inspired by NVIDIA's [End to End Learning for Self-Driving Cars](https://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf) paper. Most parts of the network are the same. I made only a few changes.
 
 First difference is the input layer. I use a 160x320x3 image, that is cropped 70 pixels from the top and 25 pixels from the bottom. These parts of the image are the sky and the car, which are not importent for navigating on track. The importent part is in the middle of the picture. As you see I still use YUV color converting for input images.
 
