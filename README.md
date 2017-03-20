@@ -40,11 +40,15 @@ What you get are two things. A driving-log csv file, it looks like this:
 The second thing you get is a directory with lots of images.
 ![training data images](./images/training_data.png "training data images")
 
-These images and the steering wheel angle value from the driving-log are used to train the model.
+These images and the steering wheel angle values from the driving-log are used to train the model.
 
 ### How to drive
 
+It is importent how you drive the car, because if you often go off the road, the model will learn how to go off the road and it will never finish the track successfully.
 
+First I collected two laps of driving at the center of the road. This is a good starting point, but not enough. After that I collected more data when I was driving from the left back to the center and from the right back to the center. So the model can learn how to get back to the center of the road.
+
+Finally I collected a training set with 11127 data points.
 
 ### Model Architecture
 
@@ -74,20 +78,19 @@ These are the final layers of my model:
 
 The data is normalized with the Keras lambda layer. 
 
-I tried different avtivation functions, ELU works best for me. 
+I tried different activation functions, ELU works best for me. 
 
 To prevent overfitting I added Dropout layer after the 5 convolutional layers. Dropout rate is 20 %.
 
 ### Training
 
-Epochs = 3
+I split the dataset in 80% training data and 20% validation data. I trained for 3 epochs and used an adam optimizer, so the learning rate was not tuned manually. I used a correction factor for the steering wheel angles of the right and the left images while training.
 
-The model used an adam optimizer, so the learning rate was not tuned manually
-
+Finally the vehicle is able to drive autonomously around the first track without leaving the road. See the result:
 
 ### Video - Autonomous driving
 
-[![Autonomous driving](http://img.youtube.com/vi/J6EGMKN2kL0/maxresdefault.jpg)](http://www.youtube.com/watch?v=J6EGMKN2kL0 "Autonomous driving")
+[![Autonomous driving](http://img.youtube.com/vi/J6EGMKN2kL0/0.jpg)](http://www.youtube.com/watch?v=J6EGMKN2kL0 "Autonomous driving")
 
 ### Recources
 * Self-Driving-Car Simulator: [Linux](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae46bb_linux-sim/linux-sim.zip), [macOS](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4594_mac-sim.app/mac-sim.app.zip), [Windows](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4419_windows-sim/windows-sim.zip), [Source](https://github.com/udacity/self-driving-car-sim)
